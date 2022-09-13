@@ -1,0 +1,298 @@
+{
+	"info": {
+		"_postman_id": "a75a7a2e-6f54-4f8b-b55c-c5012e120757",
+		"name": "Tugas Alterra Academy Day 1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13053028"
+	},
+	"item": [
+		{
+			"name": "Book",
+			"item": [
+				{
+					"name": "Get all book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{virtServer}}/book",
+							"host": [
+								"{{virtServer}}"
+							],
+							"path": [
+								"book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get book by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{virtServer}}/book/15",
+							"host": [
+								"{{virtServer}}"
+							],
+							"path": [
+								"book",
+								"15"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new book",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Books 1 \",\r\n    \"isbn\": \"203223\",\r\n    \"writer\": \"Irfaan\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{virtServer}}/book",
+							"host": [
+								"{{virtServer}}"
+							],
+							"path": [
+								"book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update book by id",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Judul Buku Satu\",\r\n    \"isbn\": \"1-234-5678-9101112-13\",\r\n    \"writer\": \"Dr. Who\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{virtServer}}/book/3",
+							"host": [
+								"{{virtServer}}"
+							],
+							"path": [
+								"book",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete book by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Judul Buku Satu\",\r\n    \"isbn\": \"1-234-5678-9101112-13\",\r\n    \"writer\": \"Dr. Who\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{virtServer}}/book/3",
+							"host": [
+								"{{virtServer}}"
+							],
+							"path": [
+								"book",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Binance",
+			"item": [
+				{
+					"name": "1 minute interval",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{test_net_binance}}/api/v1/klines?symbol=BTCUSDT&interval=1m",
+							"host": [
+								"{{test_net_binance}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"klines"
+							],
+							"query": [
+								{
+									"key": "symbol",
+									"value": "BTCUSDT"
+								},
+								{
+									"key": "interval",
+									"value": "1m"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "1 September 2022 to 7 September 2022 (UTC)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{test_net_binance}}/api/v1/klines?symbol=BTCUSDT&interval=1m&startTime=1661990401000&endTime=1662595199000",
+							"host": [
+								"{{test_net_binance}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"klines"
+							],
+							"query": [
+								{
+									"key": "symbol",
+									"value": "BTCUSDT"
+								},
+								{
+									"key": "interval",
+									"value": "1m"
+								},
+								{
+									"key": "startTime",
+									"value": "1661990401000"
+								},
+								{
+									"key": "endTime",
+									"value": "1662595199000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "account info binance",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const ts  = Date.now();\r",
+									"pm.environment.set(\"timestamp\", ts);\r",
+									"\r",
+									"let paramsObject = {};\r",
+									"\r",
+									"const binance_api_secret = pm.environment.get(\"api_secret\");\r",
+									"\r",
+									"const parameters = pm.request.url.query;\r",
+									"\r",
+									"parameters.map((param) => {\r",
+									"    if (param.key != 'signature' && \r",
+									"        param.key != 'timestamp' && \r",
+									"        !is_empty(param.value) &&\r",
+									"        !is_disabled(param.disabled)) {\r",
+									"            paramsObject[param.key] = param.value;\r",
+									"            //console.log(encodeURIComponent(param.value));\r",
+									"            //pm.environment.set(param.key, encodeURIComponent(param.value));\r",
+									"    }\r",
+									"})\r",
+									"        \r",
+									"Object.assign(paramsObject, {'timestamp': ts});\r",
+									"\r",
+									"if (binance_api_secret) {\r",
+									"    const queryString = Object.keys(paramsObject).map((key) => {\r",
+									"        return `${key}=${paramsObject[key]}`;\r",
+									"    }).join('&');\r",
+									"    console.log(queryString);\r",
+									"    const signature = CryptoJS.HmacSHA256(queryString, binance_api_secret).toString();\r",
+									"    pm.environment.set(\"signature\", signature);\r",
+									"}\r",
+									"\r",
+									"\r",
+									"function is_disabled(str) {\r",
+									"    return str == true;\r",
+									"}\r",
+									"\r",
+									"function is_empty(str) {\r",
+									"    if (typeof str == 'undefined' ||\r",
+									"        !str || \r",
+									"        str.length === 0 || \r",
+									"        str === \"\" ||\r",
+									"        !/[^\\s]/.test(str) ||\r",
+									"        /^\\s*$/.test(str) ||\r",
+									"        str.replace(/\\s/g,\"\") === \"\")\r",
+									"    {\r",
+									"        return true;\r",
+									"    }\r",
+									"    else\r",
+									"    {\r",
+									"        return false;\r",
+									"    }\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-MBX-APIKEY",
+								"value": "{{api_key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{test_net_binance}}/api/v3/account?signature={{signature}}&timestamp={{timestamp}}",
+							"host": [
+								"{{test_net_binance}}"
+							],
+							"path": [
+								"api",
+								"v3",
+								"account"
+							],
+							"query": [
+								{
+									"key": "signature",
+									"value": "{{signature}}"
+								},
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
