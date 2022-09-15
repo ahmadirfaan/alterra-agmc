@@ -65,11 +65,3 @@ func DeleteBookById(c echo.Context) error {
 
 	return wrapperResponse(http.StatusBadRequest, "failed delete book", &model.Book{}).ConvertDataJSON(c.Response())
 }
-
-func wrapperResponse(code int, message string, response interface{}) *model.HTTPResponse {
-	newResponse := new(model.HTTPResponse)
-	newResponse.Code = code
-	newResponse.Message = message
-	newResponse.Data = response
-	return newResponse
-}
