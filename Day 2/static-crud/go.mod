@@ -1,4 +1,4 @@
-module static-crud
+module alterra-agmc
 
 go 1.19
 

@@ -1,6 +1,6 @@
 package controller
 
-import "static-crud/model"
+import "alterra-agmc/model"
 
 func wrapperResponse(code int, message string, response interface{}) *model.HTTPResponse {
 	newResponse := new(model.HTTPResponse)

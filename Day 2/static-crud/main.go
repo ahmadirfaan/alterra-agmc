@@ -1,8 +1,8 @@
 package main
 
 import (
+	"alterra-agmc/controller"
 	"github.com/labstack/echo/v4"
-	"static-crud/controller"
 )
 
 func main() {

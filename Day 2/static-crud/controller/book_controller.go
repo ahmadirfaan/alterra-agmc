@@ -1,10 +1,10 @@
 package controller
 
 import (
+	"alterra-agmc/model"
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"net/http"
-	"static-crud/model"
 	"strconv"
 	"time"
 )
