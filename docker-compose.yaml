@@ -1,0 +1,21 @@
+version: "3"
+services:
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      #ini untuk mendefinisikan user bisa pake root atau tidak
+      MYSQL_USER: ahmadirfaan
+      #mendefiniskan password user
+      MYSQL_PASSWORD: P@ssw0rd
+      #password untuk root password
+      MYSQL_ROOT_PASSWORD: P@ssw0rd
+    ports:
+    - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+    - mydb:/var/lib/mysql
+volumes:
+  mydb:
