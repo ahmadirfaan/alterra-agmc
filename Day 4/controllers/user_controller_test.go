@@ -7,6 +7,7 @@ import (
 	models "alterra-agmc-day4/models/website"
 	"alterra-agmc-day4/repositories"
 	"alterra-agmc-day4/services"
+	"alterra-agmc-day4/utils"
 	"bytes"
 	"encoding/json"
 	"github.com/labstack/echo/v4"
@@ -31,13 +32,13 @@ func seedDataUser() {
 	repository.Save(database.User{
 		Id:        GetIntPointer(1),
 		Name:      "1",
-		Password:  "1",
-		Email:     "1",
+		Password:  utils.HashPassword("passwordpassword123"),
+		Email:     "email@gmail.com",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	})
 	repository.Save(database.User{
-		Id:        GetIntPointer(1),
+		Id:        GetIntPointer(2),
 		Name:      "2",
 		Password:  "2",
 		Email:     "2",
@@ -45,7 +46,7 @@ func seedDataUser() {
 		UpdatedAt: time.Now(),
 	})
 	repository.Save(database.User{
-		Id:        GetIntPointer(1),
+		Id:        GetIntPointer(3),
 		Name:      "3",
 		Password:  "3",
 		Email:     "3",
@@ -60,6 +61,8 @@ func cleanDataUser() {
 	repository.DeleteUser(1)
 	repository.DeleteUser(2)
 	repository.DeleteUser(3)
+	repository.DeleteUser(4)
+	repository.DeleteUser(5)
 }
 
 func Test_GetUsers_valid(t *testing.T) {
@@ -80,9 +83,13 @@ func Test_GetUsers_valid(t *testing.T) {
 func Test_GetUserById_valid(t *testing.T) {
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	token, _, _ := utils.GenerateToken(database.User{
+		Id: GetIntPointer(1),
+	})
+	req.Header.Set("Authorization", "Bearer "+*token)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
-	c.SetPath("/v1/users/:id")
+	c.SetPath("/restricted/v1/users/:id")
 	c.SetParamNames("id")
 	c.SetParamValues("1")
 
@@ -108,10 +115,10 @@ func Test_GetUserById_Invalid(t *testing.T) {
 }
 
 func Test_Create_User(t *testing.T) {
-	userJSON := database.User{
+	userJSON := models.CreateUserRequest{
 		Name:     "Name",
-		Email:    "email",
-		Password: "password",
+		Email:    "email@yahoo.com",
+		Password: "password123",
 	}
 
 	data, _ := json.Marshal(userJSON)
@@ -134,8 +141,8 @@ func Test_Create_User(t *testing.T) {
 func Test_Update_User(t *testing.T) {
 	userJSON := models.CreateUserRequest{
 		Name:     "Name",
-		Email:    "email",
-		Password: "password",
+		Email:    "email123@gmail.com",
+		Password: "passwordpassword123",
 	}
 
 	data, _ := json.Marshal(userJSON)
@@ -146,7 +153,10 @@ func Test_Update_User(t *testing.T) {
 
 	req := httptest.NewRequest(http.MethodPut, "/", reader)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-
+	token, _, _ := utils.GenerateToken(database.User{
+		Id: GetIntPointer(1),
+	})
+	req.Header.Set("Authorization", "Bearer "+*token)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 	c.SetPath("/restricted/v1/users/:id")
@@ -163,6 +173,10 @@ func Test_Delete_User(t *testing.T) {
 	e := echo.New()
 
 	req := httptest.NewRequest(http.MethodDelete, "/", nil)
+	token, _, _ := utils.GenerateToken(database.User{
+		Id: GetIntPointer(1),
+	})
+	req.Header.Set("Authorization", "Bearer "+*token)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 	c.SetPath("/restricted/v1/users/:id")
@@ -177,8 +191,8 @@ func Test_Delete_User(t *testing.T) {
 
 func Test_LoginUser(t *testing.T) {
 	loginJson := models.LoginUserRequest{
-		Email:    "email",
-		Password: "password",
+		Email:    "email@gmail.com",
+		Password: "passwordpassword123",
 	}
 
 	data, _ := json.Marshal(loginJson)
