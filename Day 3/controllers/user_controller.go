@@ -15,6 +15,7 @@ type UserController interface {
 	UpdateUser(c echo.Context) error
 	DeleteUser(c echo.Context) error
 	GetUserById(c echo.Context) error
+	LoginUser(c echo.Context) error
 }
 
 type userController struct {
@@ -94,4 +95,19 @@ func (uc userController) GetUserById(c echo.Context) error {
 		return wrapperResponse(http.StatusInternalServerError, "Error", nil).ConvertDataJSON(c.Response())
 	}
 	return wrapperResponse(http.StatusOK, "Success get user", user).ConvertDataJSON(c.Response())
+}
+
+func (uc userController) LoginUser(c echo.Context) error {
+
+	user := models.LoginUserRequest{}
+	err := json.NewDecoder(c.Request().Body).Decode(&user)
+	if err != nil {
+		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
+	}
+
+	token, errServices := uc.UserService.UserLogin(user)
+	if errServices != nil {
+		return wrapperResponse(http.StatusInternalServerError, "Error", nil).ConvertDataJSON(c.Response())
+	}
+	return wrapperResponse(http.StatusOK, "Success login", token).ConvertDataJSON(c.Response())
 }

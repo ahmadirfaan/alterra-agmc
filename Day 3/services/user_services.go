@@ -15,6 +15,7 @@ type UserService interface {
 	UpdateUser(user *models.CreateUserRequest, idPath int, authorization string) error
 	DeleteUser(idPath int, authorization string) error
 	GetAllUsers(page int) ([]database.User, error)
+	UserLogin(request models.LoginUserRequest) (*string, error)
 }
 
 type userService struct {
@@ -86,7 +87,17 @@ func (b *userService) GetAllUsers(page int) ([]database.User, error) {
 	return users, err
 }
 
-func (b *userService) UserLogin(username string) (string, error) {
+func (b *userService) UserLogin(request models.LoginUserRequest) (*string, error) {
+	login, err := b.userRepository.UserLogin(request.Email)
+	if err != nil {
+		return nil, errors.New("500|Database Error")
+	}
+	password := utils.HashPassword(request.Password)
+	isValid := utils.CheckPasswordHash(password, login.Password)
+	if !isValid {
+		return nil, errors.New("403|Unauthorized")
+	}
 
-	return username, nil
+	token, _, err := utils.GenerateToken(login)
+	return token, nil
 }

@@ -43,6 +43,7 @@ func (cli *Cli) Run(application *app.Application) {
 
 	//Controller for users
 	e.POST("/v1/users", userController.CreateUser)
+	e.POST("/v1/login", userController.LoginUser)
 
 	//Controller for book
 	e.GET("/v1/books/:id", bookController.GetBookById)

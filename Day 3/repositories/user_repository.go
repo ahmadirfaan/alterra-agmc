@@ -14,6 +14,7 @@ type UserRepository interface {
 	UpdateUser(user *database.User, id int) error
 	DeleteUser(id int) error
 	GetAllUsers(page int) ([]database.User, error)
+	UserLogin(email string) (database.User, error)
 }
 
 type userRepository struct {
@@ -66,8 +67,8 @@ func (u userRepository) GetAllUsers(page int) ([]database.User, error) {
 	return users, result.Error
 }
 
-func (u userRepository) UserLogin(username string) (database.User, error) {
+func (u userRepository) UserLogin(email string) (database.User, error) {
 	var user database.User
-	result := u.DB.Where("username = ?", username).First(&user)
+	result := u.DB.Where("email = ?", email).First(&user)
 	return user, result.Error
 }
