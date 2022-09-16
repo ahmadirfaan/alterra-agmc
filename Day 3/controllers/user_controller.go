@@ -60,7 +60,8 @@ func (uc userController) UpdateUser(c echo.Context) error {
 	if err != nil {
 		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
 	}
-	errServices := uc.UserService.UpdateUser(&user, id)
+	tokenString := c.Request().Header.Get("Authorization")
+	errServices := uc.UserService.UpdateUser(&user, id, tokenString)
 	if errServices != nil {
 		return wrapperResponse(http.StatusInternalServerError, "Error", nil).ConvertDataJSON(c.Response())
 	}
@@ -73,8 +74,8 @@ func (uc userController) DeleteUser(c echo.Context) error {
 	if err != nil {
 		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
 	}
-
-	errServices := uc.UserService.DeleteUser(id)
+	tokenString := c.Request().Header.Get("Authorization")
+	errServices := uc.UserService.DeleteUser(id, tokenString)
 	if errServices != nil {
 		return wrapperResponse(http.StatusInternalServerError, "Error", nil).ConvertDataJSON(c.Response())
 	}

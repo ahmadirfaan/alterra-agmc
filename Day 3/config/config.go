@@ -20,6 +20,7 @@ type Config struct {
 	DBMaxConnections         int
 	DBMaxIdleConnections     int
 	DBMaxLifetimeConnections int
+	JWTSecret                string
 }
 
 func Init() *Config {
@@ -43,6 +44,7 @@ func Init() *Config {
 		DBMaxConnections:         GetInt("DB_MAX_CONNECTIONS"),
 		DBMaxIdleConnections:     GetInt("DB_MAX_IDLE_CONNECTIONS"),
 		DBMaxLifetimeConnections: GetInt("DB_MAX_LIFETIME_CONNECTIONS"),
+		JWTSecret:                GetString("JWT_SECRET"),
 	}
 
 	return appConfig

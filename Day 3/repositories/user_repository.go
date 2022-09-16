@@ -65,3 +65,9 @@ func (u userRepository) GetAllUsers(page int) ([]database.User, error) {
 
 	return users, result.Error
 }
+
+func (u userRepository) UserLogin(username string) (database.User, error) {
+	var user database.User
+	result := u.DB.Where("username = ?", username).First(&user)
+	return user, result.Error
+}

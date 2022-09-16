@@ -43,17 +43,22 @@ func (cli *Cli) Run(application *app.Application) {
 
 	//Controller for users
 	e.POST("/v1/users", userController.CreateUser)
-	e.PUT("/v1/users/:id", userController.UpdateUser)
-	e.GET("/v1/users/:id", userController.GetUserById)
-	e.GET("/v1/users", userController.GetAllUsers)
-	e.DELETE("/v1/users/:id", userController.DeleteUser)
 
 	//Controller for book
-	e.POST("/v1/books", bookController.CreateBook)
 	e.GET("/v1/books/:id", bookController.GetBookById)
 	e.GET("/v1/books", bookController.GetAllBooks)
-	e.PUT("/v1/books/:id", bookController.UpdateBook)
-	e.DELETE("/v1/books/:id", bookController.DeleteBook)
+
+	//restricted path
+	groupJWT := e.Group("/restricted")
+	middleware.SetJwtMiddlewares(groupJWT)
+	groupJWT.POST("/v1/books", bookController.CreateBook)
+	groupJWT.PUT("/v1/books/:id", bookController.UpdateBook)
+	groupJWT.DELETE("/v1/books/:id", bookController.DeleteBook)
+
+	groupJWT.PUT("/v1/users/:id", userController.UpdateUser)
+	groupJWT.GET("/v1/users/:id", userController.GetUserById)
+	groupJWT.GET("/v1/users", userController.GetAllUsers)
+	groupJWT.DELETE("/v1/users/:id", userController.DeleteUser)
 
 	e.Logger.Fatal(e.Start(":" + application.Config.AppPort))
 }

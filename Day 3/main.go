@@ -1,8 +1,8 @@
 package main
 
 import (
-	"alterra-agmc-dynamic-crud/app"
-	"alterra-agmc-dynamic-crud/cli"
+	"alterra-agmc-day3/app"
+	"alterra-agmc-day3/cli"
 	"os"
 )
 
