@@ -11,7 +11,7 @@ import (
 
 type UserService interface {
 	CreateNewUser(request models.CreateUserRequest) error
-	GetUserById(id int) (database.User, error)
+	GetUserById(id int, authorization string) (database.User, error)
 	UpdateUser(user *models.CreateUserRequest, idPath int, authorization string) error
 	DeleteUser(idPath int, authorization string) error
 	GetAllUsers(page int) ([]database.User, error)
@@ -31,14 +31,18 @@ func NewUserService(br repositories.UserRepository) UserService {
 func (b *userService) CreateNewUser(request models.CreateUserRequest) error {
 	newUser := database.User{
 		Name:     request.Name,
-		Password: request.Password,
+		Password: utils.HashPassword(request.Password),
 		Email:    request.Email,
 	}
 	_, err := b.userRepository.Save(newUser)
 	return err
 }
 
-func (b *userService) GetUserById(id int) (database.User, error) {
+func (b *userService) GetUserById(id int, authorization string) (database.User, error) {
+	err4 := b.checkAuthenticationUser(id, authorization)
+	if err4 != nil {
+		return database.User{}, err4
+	}
 	user, err := b.userRepository.FindByUserId(id)
 	return user, err
 }
@@ -71,7 +75,7 @@ func (b *userService) checkAuthenticationUser(idPath int, authorization string) 
 		return err3
 	}
 	userIdInt, _ := strconv.Atoi(userId)
-	userExist, err2 := b.GetUserById(idPath)
+	userExist, err2 := b.userRepository.FindByUserId(idPath)
 	if err2 != nil || (userExist == database.User{}) || userIdInt != *userExist.Id {
 		return errors.New("403|NotAuthenticated")
 	}
@@ -92,8 +96,7 @@ func (b *userService) UserLogin(request models.LoginUserRequest) (*string, error
 	if err != nil {
 		return nil, errors.New("500|Database Error")
 	}
-	password := utils.HashPassword(request.Password)
-	isValid := utils.CheckPasswordHash(password, login.Password)
+	isValid := utils.CheckPasswordHash(request.Password, login.Password)
 	if !isValid {
 		return nil, errors.New("403|Unauthorized")
 	}

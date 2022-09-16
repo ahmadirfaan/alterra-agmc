@@ -95,8 +95,8 @@ func (uc userController) GetUserById(c echo.Context) error {
 	if err != nil {
 		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
 	}
-
-	user, errServices := uc.UserService.GetUserById(id)
+	tokenString := c.Request().Header.Get("Authorization")
+	user, errServices := uc.UserService.GetUserById(id, tokenString)
 	if errServices != nil {
 		return wrapperResponse(http.StatusInternalServerError, "Error", nil).ConvertDataJSON(c.Response())
 	}

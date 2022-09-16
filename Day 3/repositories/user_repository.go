@@ -62,7 +62,7 @@ func (u userRepository) GetAllUsers(page int) ([]database.User, error) {
 		offset = 25 * page
 	}
 
-	result := u.DB.Limit(25).Offset(offset)
+	result := u.DB.Limit(25).Offset(offset).Find(&users)
 
 	return users, result.Error
 }
