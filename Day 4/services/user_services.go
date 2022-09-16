@@ -7,6 +7,7 @@ import (
 	"alterra-agmc-day4/utils"
 	"errors"
 	"strconv"
+	"time"
 )
 
 type UserService interface {
@@ -30,9 +31,11 @@ func NewUserService(br repositories.UserRepository) UserService {
 
 func (b *userService) CreateNewUser(request models.CreateUserRequest) error {
 	newUser := database.User{
-		Name:     request.Name,
-		Password: utils.HashPassword(request.Password),
-		Email:    request.Email,
+		Name:      request.Name,
+		Password:  utils.HashPassword(request.Password),
+		Email:     request.Email,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 	_, err := b.userRepository.Save(newUser)
 	return err
@@ -52,9 +55,10 @@ func (b *userService) UpdateUser(user *models.CreateUserRequest, idPath int, aut
 		return err4
 	}
 	newUser := &database.User{
-		Name:     user.Name,
-		Password: utils.HashPassword(user.Password),
-		Email:    user.Email,
+		Name:      user.Name,
+		Password:  utils.HashPassword(user.Password),
+		Email:     user.Email,
+		UpdatedAt: time.Now(),
 	}
 	err := b.userRepository.UpdateUser(newUser, idPath)
 	return err

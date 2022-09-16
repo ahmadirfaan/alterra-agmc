@@ -53,7 +53,7 @@ func (uc bookController) CreateBook(c echo.Context) error {
 	if errServices != nil {
 		return wrapperResponse(http.StatusInternalServerError, "Error", nil).ConvertDataJSON(c.Response())
 	}
-	return wrapperResponse(http.StatusOK, "Success create book", book.Title).ConvertDataJSON(c.Response())
+	return wrapperResponse(http.StatusCreated, "Success create book", book.Title).ConvertDataJSON(c.Response())
 }
 
 func (uc bookController) UpdateBook(c echo.Context) error {

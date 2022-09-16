@@ -4,6 +4,7 @@ import (
 	"alterra-agmc-day4/models/database"
 	models "alterra-agmc-day4/models/website"
 	"alterra-agmc-day4/repositories"
+	"time"
 )
 
 type BookService interface {
@@ -26,9 +27,11 @@ func NewBookService(br repositories.BookRepository) BookService {
 
 func (b *bookService) CreateNewBook(request models.CreateBookRequest) error {
 	newBook := database.Book{
-		Title:  request.Title,
-		ISBN:   request.ISBN,
-		Writer: request.Writer,
+		Title:     request.Title,
+		ISBN:      request.ISBN,
+		Writer:    request.Writer,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
 	err := b.bookRepository.CreateBook(&newBook)
@@ -41,9 +44,10 @@ func (b *bookService) GetBookById(id int) (database.Book, error) {
 }
 func (b *bookService) UpdateBook(book *models.CreateBookRequest, id int) error {
 	newBook := &database.Book{
-		Title:  book.Title,
-		ISBN:   book.ISBN,
-		Writer: book.Writer,
+		Title:     book.Title,
+		ISBN:      book.ISBN,
+		Writer:    book.Writer,
+		UpdatedAt: time.Now(),
 	}
 	err := b.bookRepository.UpdateBook(newBook, id)
 	return err

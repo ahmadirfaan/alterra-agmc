@@ -54,7 +54,7 @@ func (uc userController) CreateUser(c echo.Context) error {
 	if errServices != nil {
 		return wrapperResponse(http.StatusInternalServerError, "Error", nil).ConvertDataJSON(c.Response())
 	}
-	return wrapperResponse(http.StatusOK, "Success create user", user.Email).ConvertDataJSON(c.Response())
+	return wrapperResponse(http.StatusCreated, "Success create user", user.Email).ConvertDataJSON(c.Response())
 }
 
 func (uc userController) UpdateUser(c echo.Context) error {

@@ -48,8 +48,7 @@ func (u userRepository) FindByUserId(userId int) (database.User, error) {
 }
 
 func (u userRepository) DeleteUser(id int) error {
-	var user *database.User
-	if err := u.DB.Delete(&user, id).Error; err != nil {
+	if err := u.DB.Delete(&database.User{}, id).Error; err != nil {
 		return err
 	}
 	return nil
