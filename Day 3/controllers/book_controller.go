@@ -1,9 +1,8 @@
 package controller
 
 import (
-	"alterra-agmc-dynamic-crud/models/database"
-	models "alterra-agmc-dynamic-crud/models/website"
-	"alterra-agmc-dynamic-crud/services"
+	models "alterra-agmc-day3/models/website"
+	"alterra-agmc-day3/services"
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"net/http"
@@ -47,17 +46,11 @@ func (uc bookController) CreateBook(c echo.Context) error {
 		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
 	}
 
-	newBook := database.Book{
-		Title:  book.Title,
-		ISBN:   book.ISBN,
-		Writer: book.Writer,
-	}
-
-	errServices := uc.BookService.CreateNewBook(newBook)
+	errServices := uc.BookService.CreateNewBook(book)
 	if errServices != nil {
 		return wrapperResponse(http.StatusInternalServerError, "Error", nil).ConvertDataJSON(c.Response())
 	}
-	return wrapperResponse(http.StatusOK, "Success create book", newBook).ConvertDataJSON(c.Response())
+	return wrapperResponse(http.StatusOK, "Success create book", book.Title).ConvertDataJSON(c.Response())
 }
 
 func (uc bookController) UpdateBook(c echo.Context) error {
@@ -67,16 +60,12 @@ func (uc bookController) UpdateBook(c echo.Context) error {
 	if err != nil {
 		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
 	}
-	newBook := &database.Book{
-		Title:  book.Title,
-		ISBN:   book.ISBN,
-		Writer: book.Writer,
-	}
-	errServices := uc.BookService.UpdateBook(newBook, id)
+
+	errServices := uc.BookService.UpdateBook(&book, id)
 	if errServices != nil {
 		return wrapperResponse(http.StatusInternalServerError, "Error", nil).ConvertDataJSON(c.Response())
 	}
-	return wrapperResponse(http.StatusOK, "Success update book", newBook).ConvertDataJSON(c.Response())
+	return wrapperResponse(http.StatusOK, "Success update book", book.Title).ConvertDataJSON(c.Response())
 }
 
 func (uc bookController) DeleteBook(c echo.Context) error {

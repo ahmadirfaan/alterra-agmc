@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"alterra-agmc-dynamic-crud/models/website"
+	models "alterra-agmc-day3/models/website"
 )
 
 func wrapperResponse(code int, message string, response interface{}) *models.HTTPResponse {

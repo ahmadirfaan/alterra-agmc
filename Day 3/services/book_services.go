@@ -1,14 +1,15 @@
 package services
 
 import (
-	"alterra-agmc-dynamic-crud/models/database"
-	"alterra-agmc-dynamic-crud/repositories"
+	"alterra-agmc-day3/models/database"
+	models "alterra-agmc-day3/models/website"
+	"alterra-agmc-day3/repositories"
 )
 
 type BookService interface {
-	CreateNewBook(request database.Book) error
+	CreateNewBook(request models.CreateBookRequest) error
 	GetBookById(id int) (database.Book, error)
-	UpdateBook(book *database.Book, id int) error
+	UpdateBook(book *models.CreateBookRequest, id int) error
 	DeleteBook(id int) error
 	GetAllBooks(page int) ([]database.Book, error)
 }
@@ -23,8 +24,14 @@ func NewBookService(br repositories.BookRepository) BookService {
 	}
 }
 
-func (b *bookService) CreateNewBook(request database.Book) error {
-	err := b.bookRepository.CreateBook(&request)
+func (b *bookService) CreateNewBook(request models.CreateBookRequest) error {
+	newBook := database.Book{
+		Title:  request.Title,
+		ISBN:   request.ISBN,
+		Writer: request.Writer,
+	}
+
+	err := b.bookRepository.CreateBook(&newBook)
 	return err
 }
 
@@ -32,8 +39,13 @@ func (b *bookService) GetBookById(id int) (database.Book, error) {
 	book, err := b.bookRepository.GetBookById(id)
 	return book, err
 }
-func (b *bookService) UpdateBook(book *database.Book, id int) error {
-	err := b.bookRepository.UpdateBook(book, id)
+func (b *bookService) UpdateBook(book *models.CreateBookRequest, id int) error {
+	newBook := &database.Book{
+		Title:  book.Title,
+		ISBN:   book.ISBN,
+		Writer: book.Writer,
+	}
+	err := b.bookRepository.UpdateBook(newBook, id)
 	return err
 }
 
