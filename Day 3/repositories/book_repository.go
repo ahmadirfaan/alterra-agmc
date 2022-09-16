@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"alterra-agmc-dynamic-crud/models/database"
+	"alterra-agmc-day3/models/database"
 	"gorm.io/gorm"
 )
 

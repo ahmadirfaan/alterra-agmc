@@ -1,14 +1,15 @@
 package services
 
 import (
-	"alterra-agmc-dynamic-crud/models/database"
-	"alterra-agmc-dynamic-crud/repositories"
+	"alterra-agmc-day3/models/database"
+	models "alterra-agmc-day3/models/website"
+	"alterra-agmc-day3/repositories"
 )
 
 type UserService interface {
-	CreateNewUser(request database.User) error
+	CreateNewUser(request models.CreateUserRequest) error
 	GetUserById(id int) (database.User, error)
-	UpdateUser(user *database.User, id int) error
+	UpdateUser(user *models.CreateUserRequest, id int) error
 	DeleteUser(id int) error
 	GetAllUsers(page int) ([]database.User, error)
 }
@@ -23,8 +24,13 @@ func NewUserService(br repositories.UserRepository) UserService {
 	}
 }
 
-func (b *userService) CreateNewUser(request database.User) error {
-	_, err := b.userRepository.Save(request)
+func (b *userService) CreateNewUser(request models.CreateUserRequest) error {
+	newUser := database.User{
+		Name:     request.Name,
+		Password: request.Password,
+		Email:    request.Email,
+	}
+	_, err := b.userRepository.Save(newUser)
 	return err
 }
 
@@ -32,8 +38,13 @@ func (b *userService) GetUserById(id int) (database.User, error) {
 	user, err := b.userRepository.FindByUserId(id)
 	return user, err
 }
-func (b *userService) UpdateUser(user *database.User, id int) error {
-	err := b.userRepository.UpdateUser(user, id)
+func (b *userService) UpdateUser(user *models.CreateUserRequest, id int) error {
+	newUser := &database.User{
+		Name:     user.Name,
+		Password: user.Password,
+		Email:    user.Email,
+	}
+	err := b.userRepository.UpdateUser(newUser, id)
 	return err
 }
 

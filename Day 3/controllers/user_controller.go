@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"alterra-agmc-day3/models/database"
 	models "alterra-agmc-day3/models/website"
 	"alterra-agmc-day3/services"
 	"encoding/json"
@@ -47,12 +46,7 @@ func (uc userController) CreateUser(c echo.Context) error {
 		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
 	}
 
-	newUser := database.User{
-		Name:     user.Name,
-		Password: user.Password,
-		Email:    user.Email,
-	}
-	errServices := uc.UserService.CreateNewUser(newUser)
+	errServices := uc.UserService.CreateNewUser(user)
 	if errServices != nil {
 		return wrapperResponse(http.StatusInternalServerError, "Error", nil).ConvertDataJSON(c.Response())
 	}
@@ -66,13 +60,7 @@ func (uc userController) UpdateUser(c echo.Context) error {
 	if err != nil {
 		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
 	}
-
-	newUser := &database.User{
-		Name:     user.Name,
-		Password: user.Password,
-		Email:    user.Email,
-	}
-	errServices := uc.UserService.UpdateUser(newUser, id)
+	errServices := uc.UserService.UpdateUser(&user, id)
 	if errServices != nil {
 		return wrapperResponse(http.StatusInternalServerError, "Error", nil).ConvertDataJSON(c.Response())
 	}

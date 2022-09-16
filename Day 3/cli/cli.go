@@ -4,6 +4,7 @@ import (
 	"alterra-agmc-day3/app"
 	database_config "alterra-agmc-day3/config/database"
 	controller "alterra-agmc-day3/controllers"
+	"alterra-agmc-day3/middleware"
 	"alterra-agmc-day3/repositories"
 	"alterra-agmc-day3/services"
 	"github.com/labstack/echo/v4"
@@ -36,6 +37,9 @@ func (cli *Cli) Run(application *app.Application) {
 	userController := controller.NewUserController(userService)
 
 	e := echo.New()
+
+	middleware.LogMiddleware(e)
+	e.Validator = middleware.NewCustomValidator()
 
 	//Controller for users
 	e.POST("/v1/users", userController.CreateUser)
