@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 )
 
 func injectGetBookController() BookController {
@@ -28,10 +29,12 @@ func seedData() {
 	repository := repositories.NewBookRepository(db)
 	// inject data
 	repository.CreateBook(&database.Book{
-		Id:     GetIntPointer(1),
-		Title:  "1",
-		Writer: "1",
-		ISBN:   "1",
+		Id:        GetIntPointer(1),
+		Title:     "1",
+		Writer:    "1",
+		ISBN:      "1",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	})
 	repository.CreateBook(&database.Book{
 		Id:     GetIntPointer(2),
@@ -40,10 +43,12 @@ func seedData() {
 		ISBN:   "2",
 	})
 	repository.CreateBook(&database.Book{
-		Id:     GetIntPointer(3),
-		Title:  "3",
-		Writer: "3",
-		ISBN:   "3",
+		Id:        GetIntPointer(3),
+		Title:     "3",
+		Writer:    "3",
+		ISBN:      "3",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	})
 }
 

@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 )
 
 func injectUserController() UserController {
@@ -28,22 +29,28 @@ func seedDataUser() {
 	repository := repositories.NewUserRepository(db)
 	// inject data
 	repository.Save(database.User{
-		Id:       GetIntPointer(1),
-		Name:     "1",
-		Password: "1",
-		Email:    "1",
+		Id:        GetIntPointer(1),
+		Name:      "1",
+		Password:  "1",
+		Email:     "1",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	})
 	repository.Save(database.User{
-		Id:       GetIntPointer(1),
-		Name:     "2",
-		Password: "2",
-		Email:    "2",
+		Id:        GetIntPointer(1),
+		Name:      "2",
+		Password:  "2",
+		Email:     "2",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	})
 	repository.Save(database.User{
-		Id:       GetIntPointer(1),
-		Name:     "3",
-		Password: "3",
-		Email:    "3",
+		Id:        GetIntPointer(1),
+		Name:      "3",
+		Password:  "3",
+		Email:     "3",
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	})
 }
 
@@ -145,10 +152,11 @@ func Test_Update_User(t *testing.T) {
 	c.SetPath("/restricted/v1/users/:id")
 	c.SetParamNames("id")
 	c.SetParamValues("1")
-	seedData()
+	seedDataUser()
 	if assert.NoError(t, injectUserController().UpdateUser(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 	}
+	cleanDataUser()
 }
 
 func Test_Delete_User(t *testing.T) {
@@ -160,11 +168,11 @@ func Test_Delete_User(t *testing.T) {
 	c.SetPath("/restricted/v1/users/:id")
 	c.SetParamNames("id")
 	c.SetParamValues("1")
-	seedData()
+	seedDataUser()
 	if assert.NoError(t, injectUserController().DeleteUser(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 	}
-	cleanData()
+	cleanDataUser()
 }
 
 func Test_LoginUser(t *testing.T) {
@@ -184,8 +192,9 @@ func Test_LoginUser(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 	c.SetPath("/v1/login")
-
+	seedDataUser()
 	if assert.NoError(t, injectUserController().LoginUser(c)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 	}
+	cleanDataUser()
 }
