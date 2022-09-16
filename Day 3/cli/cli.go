@@ -1,11 +1,11 @@
 package cli
 
 import (
-	"alterra-agmc-dynamic-crud/app"
-	database_config "alterra-agmc-dynamic-crud/config/database"
-	controller "alterra-agmc-dynamic-crud/controllers"
-	"alterra-agmc-dynamic-crud/repositories"
-	"alterra-agmc-dynamic-crud/services"
+	"alterra-agmc-day3/app"
+	database_config "alterra-agmc-day3/config/database"
+	controller "alterra-agmc-day3/controllers"
+	"alterra-agmc-day3/repositories"
+	"alterra-agmc-day3/services"
 	"github.com/labstack/echo/v4"
 )
 

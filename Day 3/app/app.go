@@ -1,6 +1,6 @@
 package app
 
-import "alterra-agmc-dynamic-crud/config"
+import "alterra-agmc-day3/config"
 
 type Application struct {
 	Config *config.Config

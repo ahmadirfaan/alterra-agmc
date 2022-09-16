@@ -1,8 +1,8 @@
 package database_config
 
 import (
-	"alterra-agmc-dynamic-crud/app"
-	"alterra-agmc-dynamic-crud/models/database"
+	"alterra-agmc-day3/app"
+	"alterra-agmc-day3/models/database"
 	"fmt"
 	"log"
 	"time"

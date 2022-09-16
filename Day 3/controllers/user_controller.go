@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"alterra-agmc-dynamic-crud/models/database"
-	models "alterra-agmc-dynamic-crud/models/website"
-	"alterra-agmc-dynamic-crud/services"
+	"alterra-agmc-day3/models/database"
+	models "alterra-agmc-day3/models/website"
+	"alterra-agmc-day3/services"
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"net/http"
