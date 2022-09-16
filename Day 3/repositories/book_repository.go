@@ -53,6 +53,6 @@ func (b bookRepository) GetBookById(id int) (database.Book, error) {
 
 func (b bookRepository) GetAllBooks(offset int) ([]database.Book, error) {
 	var books []database.Book
-	result := b.DB.Limit(25).Offset(offset)
+	result := b.DB.Limit(25).Offset(offset).Find(&books)
 	return books, result.Error
 }

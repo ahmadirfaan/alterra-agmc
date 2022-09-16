@@ -46,6 +46,9 @@ func (uc userController) CreateUser(c echo.Context) error {
 	if err != nil {
 		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
 	}
+	if err := c.Validate(user); err != nil {
+		return err
+	}
 
 	errServices := uc.UserService.CreateNewUser(user)
 	if errServices != nil {
@@ -60,6 +63,9 @@ func (uc userController) UpdateUser(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
+	}
+	if err := c.Validate(user); err != nil {
+		return err
 	}
 	tokenString := c.Request().Header.Get("Authorization")
 	errServices := uc.UserService.UpdateUser(&user, id, tokenString)
@@ -103,6 +109,9 @@ func (uc userController) LoginUser(c echo.Context) error {
 	err := json.NewDecoder(c.Request().Body).Decode(&user)
 	if err != nil {
 		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
+	}
+	if err := c.Validate(user); err != nil {
+		return err
 	}
 
 	token, errServices := uc.UserService.UserLogin(user)

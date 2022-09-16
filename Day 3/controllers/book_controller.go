@@ -42,6 +42,9 @@ func (uc bookController) CreateBook(c echo.Context) error {
 
 	book := models.CreateBookRequest{}
 	err := json.NewDecoder(c.Request().Body).Decode(&book)
+	if err := c.Validate(book); err != nil {
+		return err
+	}
 	if err != nil {
 		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
 	}
@@ -56,6 +59,9 @@ func (uc bookController) CreateBook(c echo.Context) error {
 func (uc bookController) UpdateBook(c echo.Context) error {
 	book := models.CreateBookRequest{}
 	err := json.NewDecoder(c.Request().Body).Decode(&book)
+	if err := c.Validate(book); err != nil {
+		return err
+	}
 	id, _ := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		return wrapperResponse(http.StatusBadRequest, "Error", nil).ConvertDataJSON(c.Response())
