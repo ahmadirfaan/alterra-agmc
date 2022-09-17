@@ -12,8 +12,10 @@ import (
 	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
+	"math/rand"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -108,16 +110,18 @@ func Test_GetUserById_Invalid(t *testing.T) {
 	c.SetPath("/restricted/v1/users/:id")
 	c.SetParamNames("id")
 	c.SetParamValues("s")
-
+	seedDataUser()
 	if assert.NoError(t, injectUserController().GetUserById(c)) {
 		assert.Equal(t, http.StatusBadRequest, rec.Code)
 	}
+	cleanDataUser()
 }
 
 func Test_Create_User(t *testing.T) {
+	atoi := strconv.Itoa(rand.Int())
 	userJSON := models.CreateUserRequest{
 		Name:     "Name",
-		Email:    "email@yahoo.com",
+		Email:    "email" + atoi + "@yahoo.com",
 		Password: "password123",
 	}
 
