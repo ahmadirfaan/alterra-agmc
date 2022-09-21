@@ -1,5 +1,15 @@
 version: "3"
 services:
+  backend-book-services:
+    build: Day 7/
+    image: "book-services"
+    restart: on-failure
+    env_file:
+      - Day 7/.env
+    ports:
+      - '8080:8080'
+    links:
+      - "mysql:database"
   mysql:
     image: mysql
     restart: always
